@@ -153,7 +153,7 @@ namespace CameraTimelapseMod
 
         [SettingsUIMultilineText]
         [SettingsUISection(kGeneralGroup, kGeneralAboutGroup)]
-        public string kGeneralAbout => string.Empty;
+        public string kGeneralAbout => Mod.sorryForThisCommentAhah;
 
         [SettingsUIButton]
         [SettingsUISection(kGeneralGroup, kGeneralAboutGroup)]
@@ -162,12 +162,6 @@ namespace CameraTimelapseMod
             set { Tools.OpenUrl(Mod.forumLink); }
         }
 
-
-
-
-        [SettingsUIMultilineText]
-        [SettingsUISection(kGeneralGroup, kGeneralAboutGroup)]
-        public string kGeneralAboutComment => Mod.sorryForThisCommentAhah;
 
         [SettingsUIButton]
         [SettingsUISection(kGeneralGroup, kGeneralAboutGroup)]

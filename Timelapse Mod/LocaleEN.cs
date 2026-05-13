@@ -31,7 +31,7 @@ namespace CameraTimelapseMod
                 { _setting.GetOptionGroupLocaleID(Setting.kAutoFilterGroup), "Filter" },
 
 
-                { _setting.GetOptionLabelLocaleID(nameof(Setting.kGeneralAboutComment)), Mod.sorryForThisCommentAhah },
+                { _setting.GetOptionLabelLocaleID(nameof(Setting.kGeneralAbout)), Mod.sorryForThisCommentAhah },
                 { _setting.GetOptionLabelLocaleID(nameof(Setting.kGeneralAboutCommentCompany)), Mod.companyText },
 
                 { _setting.GetOptionLabelLocaleID(nameof(Setting.kGeneralAboutCommentCompanyLink)),
@@ -40,13 +40,6 @@ namespace CameraTimelapseMod
                    "Follow my startup" },
 
 
-                { _setting.GetOptionLabelLocaleID(nameof(Setting.kGeneralAbout)),
-                  "I hope you will enjoy this mod as much as I had fun doing it! Please if " +
-                  "you use it, quote it's link or name in your work, so other can enjoy it too, " +
-                  "otherwise I may just loose interest and not maintain it if I see people using " +
-                  "it without credits :P It's also open source so feel free to see it's github if needed. \n \n" +
-                  "No need for a coffee, but if you want to help me too, I would love you to contact me if you know anyone working in" +
-                  "a public transit company in the administratif part, it's for a project :) Thanks ! " },
 
 
                 { _setting.GetOptionLabelLocaleID(nameof(Setting.kSavesInfo)),
