@@ -62,7 +62,7 @@ e) Misrepresent your work as being endorsed by, sponsored by, or affiliated
 
 Whenever attribution is required under this license, it must include:
   - The mod name (its public display name)
-  - The author pseudo: Microscraft
+  - The author pseudo: Microscraft (Dakirutz)
   - A clickable link to the original GitHub/Paradox Mods page
   - A clear statement of which portions of the code or design were reused
 

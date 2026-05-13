@@ -31,6 +31,15 @@ namespace CameraTimelapseMod
                 { _setting.GetOptionGroupLocaleID(Setting.kAutoFilterGroup), "Filter" },
 
 
+                { _setting.GetOptionLabelLocaleID(nameof(Setting.kGeneralAboutComment)), Mod.sorryForThisCommentAhah },
+                { _setting.GetOptionLabelLocaleID(nameof(Setting.kGeneralAboutCommentCompany)), Mod.companyText },
+
+                { _setting.GetOptionLabelLocaleID(nameof(Setting.kGeneralAboutCommentCompanyLink)),
+                  "Rate my skills" },
+                { _setting.GetOptionLabelLocaleID(nameof(Setting.kGeneralAboutCommentCompanyFollowLink)),
+                   "Follow my startup" },
+
+
                 { _setting.GetOptionLabelLocaleID(nameof(Setting.kGeneralAbout)),
                   "I hope you will enjoy this mod as much as I had fun doing it! Please if " +
                   "you use it, quote it's link or name in your work, so other can enjoy it too, " +

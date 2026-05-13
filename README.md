@@ -199,7 +199,7 @@ I'm also looking to contact people working in the marketing department (or simil
 
 ## Credits
 
-Created and maintained by `@microscraft`.
+Created and maintained by `@microscraft` (Dakirutz).
 
 Thanks to the Cities: Skylines II modding community for tools, documentation, and inspiration — particularly the modding Discord for their work and community presence.
 
