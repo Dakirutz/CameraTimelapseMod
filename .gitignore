@@ -1,0 +1,34 @@
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+
+# .NET build output
+bin/
+obj/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+
+# Rider
+.idea/
+
+# Unity / mod build cache
+Library/
+Temp/
+
+# UI build
+node_modules/
+dist/
+*.tsbuildinfo
+
+# Logs
+[Ll]ogs/
+*.log
+
+# Misc OS
+.DS_Store
+Thumbs.db
+*.tmp

@@ -1,0 +1,126 @@
+CameraTimelapseMod — Custom License
+Copyright (c) 2026 Joel Iunius
+
+This software (the "Mod") is licensed under the following terms.
+All rights not explicitly granted below are reserved.
+
+────────────────────────────────────────────────────────────────────────────
+1. PERMITTED USES
+────────────────────────────────────────────────────────────────────────────
+
+You ARE allowed to:
+
+a) Read, study, and learn from the source code for personal or educational
+   purposes.
+
+b) Copy specific portions (snippets, functions, files) into your own mod,
+   PROVIDED THAT all of the following conditions are met:
+      - You clearly credit the original work in the Paradox Mods page of
+        your mod, with a link to the original repository.
+      - You clearly credit the original work in the README of your mod's
+        source repository, with a link to the original repository.
+      - You do not use the copied code to build a mod that competes with
+        or duplicates the main functionality of this Mod, unless you have
+        first obtained explicit written permission from the original author
+        via Discord or email (see CONTACT section).
+      - You comply with all other terms of this license.
+
+c) Create a separate mod that uses this Mod as a runtime dependency
+   (no source code copy required). This is the PREFERRED way to build
+   upon this work. No prior permission is needed for this. The user should
+   sees the mod in his Paradox Playset or it should be credited in your mod 
+   as if you copied a specific portion. 
+
+────────────────────────────────────────────────────────────────────────────
+2. PROHIBITED USES
+────────────────────────────────────────────────────────────────────────────
+
+You ARE NOT allowed to:
+
+a) Republish this Mod under your own name, in whole or in part, modified
+   or unmodified, on Paradox Mods or any other platform, EXCEPT under the
+   conditions in section 4 (Maintainer Succession).
+
+b) Sell this Mod, charge for access to it, or use it in any commercial
+   product or service, without prior written permission from the author.
+
+c) Use this code in a project unrelated to Cities: Skylines II modding
+   for commercial purposes, without prior written permission from the
+   author.
+
+d) Build a mod whose primary functionality substantially overlaps with
+   this Mod, even with proper attribution, unless permission has been
+   granted by the author. The intent is to encourage building on top of
+   this Mod via runtime dependency, not to duplicate it.
+
+e) Misrepresent your work as being endorsed by, sponsored by, or affiliated
+   with the original author without explicit permission.
+
+────────────────────────────────────────────────────────────────────────────
+3. ATTRIBUTION REQUIREMENTS
+────────────────────────────────────────────────────────────────────────────
+
+Whenever attribution is required under this license, it must include:
+  - The mod name (its public display name)
+  - The author pseudo: Microscraft
+  - A clickable link to the original GitHub/Paradox Mods page
+  - A clear statement of which portions of the code or design were reused
+
+────────────────────────────────────────────────────────────────────────────
+4. MAINTAINER SUCCESSION
+────────────────────────────────────────────────────────────────────────────
+
+If the original author becomes unresponsive for a long period — defined as no 
+response on Discord, no response on the Paradox Forum topic linked to this Mod, 
+and no public commit to the repository — then the following GitHub users are 
+authorized to fork, maintain, and publish updated versions of this Mod on 
+Paradox Mods, under this same license, while clearly attributing the original 
+work:
+
+  - https://github.com/yenyang
+  - https://github.com/bruceyboy24804
+
+This succession right applies only to these two users. They must:
+  - Maintain attribution to Joel Iunius as the original author.
+  - Make it clear in the mod's description that they are continuing the
+    work in the original author's absence.
+  - Cease publication if the original author returns and requests it.
+
+────────────────────────────────────────────────────────────────────────────
+5. WARRANTY DISCLAIMER
+────────────────────────────────────────────────────────────────────────────
+
+THIS SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHOR BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+Please, save your game and saves before using... 
+
+────────────────────────────────────────────────────────────────────────────
+6. GOVERNING LAW
+────────────────────────────────────────────────────────────────────────────
+
+This license is governed by the laws of Switzerland. Any dispute shall
+be resolved in the competent courts of Vaud, Switzerland, unless
+otherwise agreed in writing.
+
+────────────────────────────────────────────────────────────────────────────
+7. CONTACT
+────────────────────────────────────────────────────────────────────────────
+
+For permissions, commercial use, or any questions:
+  - Discord: microscraft 
+  - Email:   See Mod.email variable
+  - Forum:   See Mod.forumLink variable
+
+────────────────────────────────────────────────────────────────────────────
+
+By using, copying, modifying, or distributing this software, you agree
+to be bound by the terms of this license.
+
+Note: if you feel this license is too restrictive for your need, do not
+hesitate to contact me, so we can see what we can do about it. I just try to 
+protect my work, not to prevent you to work too.
