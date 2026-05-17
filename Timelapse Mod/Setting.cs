@@ -1,10 +1,11 @@
-﻿using Colossal;
+﻿using CameraTimelapseMod.Systems;
+using CameraTimelapseMod.Util;
+using Colossal;
 using Colossal.IO.AssetDatabase;
+using Game.Input;
 using Game.Modding;
 using Game.Settings;
 using Game.UI;
-using CameraTimelapseMod.Systems;
-using CameraTimelapseMod.Util;
 using Unity.Entities;
 using UnityEngine;
 
@@ -24,8 +25,17 @@ namespace CameraTimelapseMod
         kVideoGeneralGroup, kVideoObsGroup
     )]
     [SettingsUITabOrder(kGeneralGroup, kAutoGroup, kSavesGroup, kVideoGroup, kCartoGroup)]
+
+    [SettingsUIKeyboardAction(StopSessionActionName, ActionType.Button,
+    usages: new string[] { "TimelapseSession", Game.Input.Usages.kDefaultUsage })]
+    [SettingsUIKeyboardAction(PauseResumeActionName, ActionType.Button,
+    usages: new string[] { "TimelapseSession", Game.Input.Usages.kDefaultUsage })]
+
+
     public class Setting : ModSetting
     {
+        public const string StopSessionActionName = "StopSession";
+        public const string PauseResumeActionName = "PauseResumeSession";
 
         public const string kGeneralGroup = "General";
         public const string kAutoGroup = "Auto Timelapse Mod";
@@ -126,6 +136,8 @@ namespace CameraTimelapseMod
             Fast_x3 = 3
         }
 
+
+
         // ----- GENERAL - GENERAL -----
 
         [SettingsUIButton]
@@ -148,6 +160,35 @@ namespace CameraTimelapseMod
         [SettingsUIDirectoryPicker]
         [SettingsUISection(kGeneralGroup, kGeneralGeneralGroup)]
         public string ScreenshotFolderOverride { get; set; } = "";
+
+        [SettingsUISection(kGeneralGroup, kGeneralGeneralGroup)]
+        [SettingsUISlider(min = 0, max = 120, step = 1, unit = Unit.kInteger)]
+        public int ReminderMinutes { get; set; } = 0;
+
+        [SettingsUISection(kGeneralGroup, kGeneralGeneralGroup)]
+        public CaptureQuality Quality { get; set; } = CaptureQuality.QHD_2560x1440;
+
+        [SettingsUISection(kGeneralGroup, kGeneralGeneralGroup)]
+        [SettingsUITextInput]
+        public string CaptureTimes { get; set; } = "12.0";
+
+        [SettingsUISection(kGeneralGroup, kGeneralGeneralGroup)]
+        public ClearWeatherMode ForceClearWeatherMode { get; set; } = ClearWeatherMode.AlwaysForce;
+
+        [SettingsUISection(kGeneralGroup, kGeneralGeneralGroup)]
+        public bool HideUIInScreenshots { get; set; } = true;
+
+        [SettingsUISection(kGeneralGroup, kGeneralGeneralGroup)]
+        public ShutdownMode ShutdownAfterSession { get; set; } = ShutdownMode.None;
+
+
+        [SettingsUISection(kGeneralGroup, kGeneralGeneralGroup)]
+        [SettingsUIKeyboardBinding(BindingKeyboard.NumpadEnter, StopSessionActionName)]
+        public ProxyBinding StopSessionBinding { get; set; }
+
+        [SettingsUISection(kGeneralGroup, kGeneralGeneralGroup)]
+        [SettingsUIKeyboardBinding(BindingKeyboard.Numpad0, PauseResumeActionName)]
+        public ProxyBinding PauseResumeBinding { get; set; }
 
 
 
@@ -201,26 +242,6 @@ namespace CameraTimelapseMod
 
 
 
-
-        [SettingsUISection(kGeneralGroup, kGeneralGeneralGroup)]
-        [SettingsUISlider(min = 0, max = 120, step = 1, unit = Unit.kInteger)]
-        public int ReminderMinutes { get; set; } = 0;
-
-        [SettingsUISection(kGeneralGroup, kGeneralGeneralGroup)]
-        public CaptureQuality Quality { get; set; } = CaptureQuality.QHD_2560x1440;
-
-        [SettingsUISection(kGeneralGroup, kGeneralGeneralGroup)]
-        [SettingsUITextInput]
-        public string CaptureTimes { get; set; } = "12.0";
-
-        [SettingsUISection(kGeneralGroup, kGeneralGeneralGroup)]
-        public ClearWeatherMode ForceClearWeatherMode { get; set; } = ClearWeatherMode.AlwaysForce;
-
-        [SettingsUISection(kGeneralGroup, kGeneralGeneralGroup)]
-        public bool HideUIInScreenshots { get; set; } = true;
-
-        [SettingsUISection(kGeneralGroup, kGeneralGeneralGroup)]
-        public ShutdownMode ShutdownAfterSession { get; set; } = ShutdownMode.None;
 
 
         // ----- All Saves - GENERAL -----

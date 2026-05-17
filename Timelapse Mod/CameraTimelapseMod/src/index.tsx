@@ -7,6 +7,7 @@ import { Button, Panel, Portal } from "cs2/ui";
 const MOD_ID = "CameraTimelapseMod";
 
 // ---------- Bindings ----------
+//< InfoRow label = "ETA" value = { formatEta(s.etaSeconds) } />
 
 const presetsJson$ = bindValue<string>(MOD_ID, "presetsJson", "{\"Items\":[]}");
 const openPanel$ = bindValue<boolean>(MOD_ID, "openPanel", false);
@@ -230,15 +231,15 @@ const AutoTimelapsePanel = () => {
                 <div style={buttonsRowStyle}>
                     {s.paused ? (
                         <Button variant="primary" style={primaryBtnOverride} onSelect={() => trigger(MOD_ID, "autoTimelapseResume")}>
-                            Resume [space]
+                            Resume [numpad 0]
                         </Button>
                     ) : (
                         <Button variant="primary" style={primaryBtnOverride} onSelect={() => trigger(MOD_ID, "autoTimelapsePause")}>
-                            Pause [space]
+                            Pause [numpad 0]
                         </Button>
                     )}
                     <Button variant="flat" style={flatBtnOverride} onSelect={() => trigger(MOD_ID, "autoTimelapseStop")}>
-                        Stop [Esc]
+                        Stop [numpad Enter]
                     </Button>
                 </div>
             </Panel>
@@ -283,7 +284,6 @@ const SessionProgressPanel = () => {
 
                 <div style={sectionStyle}>
                     <InfoRow label="Captured" value={s.completedScreenshots ?? 0} />
-                    <InfoRow label="ETA" value={formatEta(s.etaSeconds)} />
                 </div>
 
                 {s.comment && (
@@ -295,15 +295,15 @@ const SessionProgressPanel = () => {
                 <div style={buttonsRowStyle}>
                     {s.paused ? (
                         <Button variant="primary" style={primaryBtnOverride} onSelect={() => trigger(MOD_ID, "sessionResume")}>
-                            Resume [space]
+                            Resume [numpad 0]
                         </Button>
                     ) : (
                         <Button variant="primary" style={primaryBtnOverride} onSelect={() => trigger(MOD_ID, "sessionPause")}>
-                            Pause [space]
+                            Pause [numpad 0]
                         </Button>
                     )}
                     <Button variant="flat" style={flatBtnOverride} onSelect={() => trigger(MOD_ID, "sessionStop")}>
-                        Stop [Esc]
+                        Stop [numpad enter]
                     </Button>
                 </div>
 
@@ -333,7 +333,7 @@ const PresetManagerPanel = () => {
     const photoModeActive = useValue(isPhotoModeActive$);
 
     React.useEffect(() => {
-        if (requestedOpen) setIsOpen(true);
+        setIsOpen(requestedOpen);
     }, [requestedOpen]);
 
     const json = useValue(presetsJson$);

@@ -111,9 +111,7 @@ namespace CameraTimelapseMod
                   "Comma-separated list of hours (0-24) at which to capture screenshots, applied to ALL presets. " +
                   "Examples: '12' for noon only, '0,12' for midnight and noon, " +
                   "'6,12,18,22' for sunrise/noon/sunset/night. Use decimal for partial hours like '18.5' for 6:30 PM.\n\n" +
-                  "LEAVE EMPTY to use each preset's own saved Time of Day instead.\n\n" +
-                  "Warning: if a preset was saved with photo/camera mode active, the photo mode's Time of Day " +
-  "is used for that preset (the value above is ignored for it)." },
+                  "This ignore the time you set in a preset with camera mod, if you want to use the time you set up in a camera mod preset with the time checkbox checked, then let this empty." },
 
 
                 { _setting.GetOptionLabelLocaleID(nameof(Setting.ForceClearWeatherMode)),
@@ -471,6 +469,34 @@ namespace CameraTimelapseMod
                     "(AppData/.../CameraTimelapseMod/Videos). " +
                     "Make sure the folder you choose exists and is writable. " +
                     "OBS Studio 30.1 or later is required for the mod to redirect recordings here automatically." },
+
+
+
+
+
+
+
+
+
+                { _setting.GetBindingMapLocaleID(),
+                  "Auto Timelapse Mod" },
+
+                { _setting.GetBindingKeyLocaleID(Setting.StopSessionActionName),
+                  "Stop session / Cancel cinematic" },
+
+                { _setting.GetBindingKeyLocaleID(Setting.PauseResumeActionName),
+                  "Pause / Resume session" },
+
+                { _setting.GetOptionLabelLocaleID(nameof(Setting.StopSessionBinding)),
+                  "Hotkey: stop session" },
+                { _setting.GetOptionDescLocaleID(nameof(Setting.StopSessionBinding)),
+                  "Key to stop the current timelapse session or cancel a playing cinematic. " +
+                  "Default: Num Pad Enter. If this conflicts with the game's pause menu, rebind it here." },
+
+                { _setting.GetOptionLabelLocaleID(nameof(Setting.PauseResumeBinding)),
+                  "Hotkey: pause / resume session" },
+                { _setting.GetOptionDescLocaleID(nameof(Setting.PauseResumeBinding)),
+                  "Key to pause or resume the current timelapse session. Default: Num Pad 0." },
             };
         }
 

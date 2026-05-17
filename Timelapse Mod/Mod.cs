@@ -11,7 +11,7 @@ using Unity.Burst;
 
 //readme and mod description
 //youtube link and make mod public
-//nex links web
+//tester set heure presets 
 
 //il faut build puis npm build et pas inverse sinon .mjs n'est pas mis dans mods file du jeu de cameratmelapsemod
 //https://github.com/JadHajjar/RoadBuilder-CSII/blob/main/RoadBuilder/UI/src/vanillacomponentresolver.tsx
@@ -55,6 +55,7 @@ namespace CameraTimelapseMod
             Directory.CreateDirectory(DataDir);
 
             Setting = new Setting(this);
+            Setting.RegisterKeyBindings();
             Setting.RegisterInOptionsUI();
             GameManager.instance.localizationManager.AddSource("en-US", new LocaleEN(Setting));
             AssetDatabase.global.LoadSettings(nameof(CameraTimelapseMod), Setting, new Setting(this));

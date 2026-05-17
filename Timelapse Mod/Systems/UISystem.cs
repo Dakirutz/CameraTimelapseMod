@@ -162,7 +162,7 @@ namespace CameraTimelapseMod.Systems
             sb.Append($"\"totalEdgesProcessed\":{AutoTimelapseSessionSystem.TotalEdgesProcessed},");
             sb.Append($"\"edgesLeft\":{AutoTimelapseSessionSystem.LastKnownEdgeCount},");
             sb.Append($"\"phase\":\"{Tools.Escape(AutoTimelapseSessionSystem.CurrentPhase ?? "")}\",");
-            sb.Append($"\"folder\":\"{Tools.Escape(AutoTimelapseSessionSystem.SessionFolder ?? "")}\"");
+            sb.Append($"\"folder\":\"{Tools.Escape(AutoTimelapseSessionSystem.SessionFolder ?? "")}\",");  
             sb.Append($"\"comment\":\"{Tools.Escape(Mod.sorryForThisCommentAhah)}\"");
             sb.Append("}");
             return sb.ToString();
@@ -185,7 +185,8 @@ namespace CameraTimelapseMod.Systems
             if (s == null || !s.IsActive)
                 return "{\"active\":false}";
 
-            var sb = new System.Text.StringBuilder();
+            var sb = new System.Text.StringBuilder(); 
+            string currentTimeStr = float.IsNaN(s.CurrentTime) ? "null": s.CurrentTime.ToString("F2", System.Globalization.CultureInfo.InvariantCulture);
             sb.Append("{");
             sb.Append("\"active\":true,");
             sb.Append($"\"paused\":{(s.IsPaused ? "true" : "false")},");
@@ -195,7 +196,7 @@ namespace CameraTimelapseMod.Systems
             sb.Append($"\"viewTotal\":{s.ViewTotal},");
             sb.Append($"\"timeIdx\":{s.TimeIdx},");
             sb.Append($"\"timeTotal\":{s.TimeTotal},");
-            sb.Append($"\"currentTime\":{s.CurrentTime.ToString("F2", System.Globalization.CultureInfo.InvariantCulture)},");
+            sb.Append($"\"currentTime\":{currentTimeStr},");
             sb.Append($"\"currentSave\":\"{Tools.Escape(s.CurrentSave)}\",");
             sb.Append($"\"phase\":\"{s.Phase}\",");
             sb.Append($"\"etaSeconds\":{s.EtaSeconds},");

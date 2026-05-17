@@ -1,9 +1,10 @@
-﻿using Colossal.Serialization.Entities;
+﻿using CameraTimelapseMod.Data;
+using CameraTimelapseMod.Util;
+using Colossal.Serialization.Entities;
 using Game;
+using Game.Input;
 using Game.SceneFlow;
 using Game.Zones;
-using CameraTimelapseMod.Data;
-using CameraTimelapseMod.Util;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -42,6 +43,9 @@ namespace CameraTimelapseMod.Systems
         private bool _cinematicsTriggered = false;
         private bool _cinematicsDone = false;
 
+        private ProxyAction _stopAction;
+        private ProxyAction _pauseResumeAction;
+
 
         public class ProgressSnapshot
         {
@@ -72,6 +76,12 @@ namespace CameraTimelapseMod.Systems
                 _state.CompletedScreenshots++;
                 PersistState();
             };
+
+            _stopAction = Mod.Setting.GetAction(Setting.StopSessionActionName);
+            _pauseResumeAction = Mod.Setting.GetAction(Setting.PauseResumeActionName);
+            _stopAction.shouldBeEnabled = true;
+            _pauseResumeAction.shouldBeEnabled = true;
+
             LoadStateFromDisk();
             LogsTools.Info("SessionSystem ready");
         }
@@ -220,9 +230,13 @@ namespace CameraTimelapseMod.Systems
                         bool forceClear = SettingsTools.ShouldForceWeather(presetHasPhotoMode);
 
                         if (!float.IsNaN(captureTime))
+                        {
                             GameTools.ApplyTimeAndWeather(captureTime, forceClear);
+                        }
                         else if (forceClear)
+                        {
                             GameTools.ApplyClearWeather();
+                        }
 
                         _settleFrames = 30;
                         Transition(SessionPhase.ApplyView);
@@ -262,9 +276,12 @@ namespace CameraTimelapseMod.Systems
                     if (useCaptureTimes)
                         PresetsSystem.ApplyIgnoreTimeOfDay(preset);
                     else
-                        PresetsSystem.Apply(preset); 
+                        PresetsSystem.Apply(preset);
 
-                    _settleFrames = 5;
+                    // Photo Mode presets need more time to settle (DoF, exposure, etc.)
+                    bool presetHasPhotoMode2 = preset.PhotoModeProperties != null
+                                           && preset.PhotoModeProperties.Count > 0;
+                    _settleFrames = presetHasPhotoMode2 ? 75 : 10;
                     Transition(SessionPhase.CaptureFrame);
                     break;
 
@@ -509,43 +526,40 @@ namespace CameraTimelapseMod.Systems
 
         private void HandleHotkeys()
         {
-            var kb = Keyboard.current;
-            if (kb == null) return;
-
-            if (kb.escapeKey.wasPressedThisFrame)
+            if (_stopAction != null && _stopAction.WasPressedThisFrame())
             {
                 if (Systems.CinematicSystem.IsCinematicPlaying)
                 {
                     Systems.CinematicSystem.RequestCancel();
-                    LogsTools.Info("ESC: cinematic cancel requested");
+                    LogsTools.Info("Stop hotkey: cinematic cancel requested");
                 }
 
                 if (_state.Phase != SessionPhase.Idle)
                 {
                     _reqStop = true;
-                    LogsTools.Info("ESC: session stop requested");
+                    LogsTools.Info("Stop hotkey: session stop requested");
                 }
 
                 if (AutoTimelapseSessionSystem.IsRunning)
                 {
                     AutoTimelapseSessionSystem.CancelSession();
-                    LogsTools.Info("ESC: auto timelapse cancel requested");
+                    LogsTools.Info("Stop hotkey: auto timelapse cancel requested");
                 }
             }
 
-            if (kb.spaceKey.wasPressedThisFrame)
+            if (_pauseResumeAction != null && _pauseResumeAction.WasPressedThisFrame())
             {
                 if (_state.Phase != SessionPhase.Idle)
                 {
                     if (_state.IsPaused)
                     {
                         _reqResumeFromPause = true;
-                        LogsTools.Info("SPACE: session resume requested");
+                        LogsTools.Info("Pause/Resume hotkey: session resume requested");
                     }
                     else
                     {
                         _reqPause = true;
-                        LogsTools.Info("SPACE: session pause requested");
+                        LogsTools.Info("Pause/Resume hotkey: session pause requested");
                     }
                 }
 
@@ -554,12 +568,12 @@ namespace CameraTimelapseMod.Systems
                     if (AutoTimelapseSessionSystem.IsPaused)
                     {
                         AutoTimelapseSessionSystem.RequestResume();
-                        LogsTools.Info("SPACE: auto timelapse resume requested");
+                        LogsTools.Info("Pause/Resume hotkey: auto timelapse resume requested");
                     }
                     else
                     {
                         AutoTimelapseSessionSystem.RequestPause();
-                        LogsTools.Info("SPACE: auto timelapse pause requested");
+                        LogsTools.Info("Pause/Resume hotkey: auto timelapse pause requested");
                     }
                 }
             }
@@ -569,13 +583,26 @@ namespace CameraTimelapseMod.Systems
         public static void RequestPause() => _reqPause = true;
         public static void RequestResume() => _reqResumeFromPause = true;
 
+        
+
         private void HandleRequests()
         {
-            if (_reqStop) { _reqStop = false; AbortSession(); }
+            if (_reqStop)
+            {
+                LogsTools.Info($"_reqStop processing: phase was {_state.Phase}, calling AbortSession");
+                _reqStop = false;
+                AbortSession();
+            }
             if (_reqStartCurrent) { _reqStartCurrent = false; StartSessionCurrentSave(); }
             if (_reqStartAll) { _reqStartAll = false; StartSessionAllSaves(); }
-            if (_reqResume) { _reqResume = false; ResumeSession(); } 
-            if (_reqPause) { _reqPause = false; _state.IsPaused = true; PersistState(); LogsTools.Info("Session paused"); }
+            if (_reqResume) { _reqResume = false; ResumeSession(); }
+            if (_reqPause)
+            {
+                LogsTools.Info($"_reqPause processing: setting IsPaused=true on phase {_state.Phase}");
+                _reqPause = false;
+                _state.IsPaused = true;
+                PersistState();
+            }
             if (_reqResumeFromPause) { _reqResumeFromPause = false; _state.IsPaused = false; PersistState(); LogsTools.Info("Session resumed"); }
         }
 
@@ -613,6 +640,7 @@ namespace CameraTimelapseMod.Systems
             _settleFrames = 30;
             PersistState();
             UITools.CloseGameMenu();
+            Systems.UISystem.RequestClosePanel();
             if (Mod.Setting?.VideoRecordingEnabled ?? false)
             {
                 CoroutineSystem.Instance.StartCoroutine(ConnectObsThenCheck());
@@ -699,6 +727,7 @@ namespace CameraTimelapseMod.Systems
             _settleFrames = 30;
             PersistState();
             UITools.CloseGameMenu();
+            Systems.UISystem.RequestClosePanel();
 
             if (Mod.Setting?.VideoRecordingEnabled ?? false)
             {
@@ -806,7 +835,7 @@ namespace CameraTimelapseMod.Systems
 
 
         private void AbortSession()
-        { 
+        {
             Tools.StopCrashWatchdog();
 
             if (Systems.ObsClientSystem.IsConnected)
@@ -818,21 +847,23 @@ namespace CameraTimelapseMod.Systems
             CameraTools.ExitCinematicMode();
 
             int doneScreenshots = _state.CompletedScreenshots;
-
             int successful = _state.SuccessfulSaves;
             int total = _state.TotalExpectedSaves;
+            bool wasAllSavesMode = _state.IsAllSavesMode; 
+
             LogsTools.Info($"Session aborted ({doneScreenshots} screenshot(s) saved before stop)");
 
             _state = new SessionState();
             ClearStateFile();
-            ResetTransientFlags();   // si tu as ajouté cette méthode
+            ResetTransientFlags();
 
             UITools.ShowMessage(
                 "Session stopped",
                 $"Session stopped by user.\n\n" +
                 $"Saves processed: {successful}/{total}\n" +
                 $"{doneScreenshots} screenshot(s) were saved before stop.\n\n" +
-                "You can find them in the screenshots folder.");
+                "You can find them in the screenshots folder." +
+                (wasAllSavesMode ? "\n\nDO NOT save the game." : ""));
         }
 
         private void FinishSession()
@@ -868,7 +899,7 @@ namespace CameraTimelapseMod.Systems
                 $"Session finished successfully.\n\n" +
                 $"Saves processed: {successful}/{total}\n" +
                 $"Screenshots saved: {doneScreenshots}\n\n" +
-                "DO NOT save the game.");
+                (wasAllSavesMode ? "DO NOT save the game." : ""));
 
 
 

@@ -72,6 +72,7 @@ namespace CameraTimelapseMod.Systems
             try
             {
                 UITools.CloseGameMenu();
+                Systems.UISystem.RequestClosePanel();
                 _isRunning = true;
                 _currentStep = 0;
                 _totalEdgesProcessed = 0;
@@ -348,7 +349,10 @@ namespace CameraTimelapseMod.Systems
                         else
                             PresetsSystem.Apply(preset);
 
-                        yield return new WaitForSeconds(0.5f);
+
+                        // Photo Mode presets need more time to settle (DoF, exposure, etc.)
+                        float settleSeconds = presetHasPhotoMode ? 1.5f : 0.5f;
+                        yield return new WaitForSeconds(settleSeconds);
 
 
                         string presetSafeName = Tools.Sanitize(preset.Name ?? $"preset{i}");
