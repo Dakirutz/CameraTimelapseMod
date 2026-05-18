@@ -38,6 +38,8 @@ namespace CameraTimelapseMod.Systems
         public static void RequestStartAll() => _reqStartAll = true;
         public static void RequestStop() => _reqStop = true;
 
+        private bool _resumeCancelled = false;
+
         private bool _videoRecordingTriggered = false;
         private bool _videoRecordingDone = false; 
         private bool _cinematicsTriggered = false;
@@ -96,6 +98,7 @@ namespace CameraTimelapseMod.Systems
         {
             if (_state.Phase == SessionPhase.Idle)
                 return new ProgressSnapshot { IsActive = false };
+
 
             return new ProgressSnapshot
             {
@@ -171,7 +174,13 @@ namespace CameraTimelapseMod.Systems
 
         private System.Collections.IEnumerator TriggerResumeAfterDelay(float seconds)
         {
+            _resumeCancelled = false;
             yield return new UnityEngine.WaitForSeconds(seconds);
+            if (_resumeCancelled)
+            {
+                LogsTools.Info("Resume cancelled, not issuing resume request");
+                yield break;
+            }
             _reqResume = true;
             LogsTools.Info("Resume request issued");
         }
@@ -302,10 +311,11 @@ namespace CameraTimelapseMod.Systems
                     break;
 
                 case SessionPhase.PlayCinematicsForHour:
-                    if (string.IsNullOrEmpty(Mod.Setting?.CinematicsToRecord))
+                    var assets = SettingsTools.GetConfiguredCinematics();
+                    if (assets.Count == 0)
                     {
                         AdvanceModeAfterCinematics();
-                        break; 
+                        break;
                     }
 
                     if (!Systems.ObsClientSystem.IsConnected)
@@ -633,7 +643,7 @@ namespace CameraTimelapseMod.Systems
                 IsAllSavesMode = false,
                 TotalExpectedSaves = 1,
                 SuccessfulSaves = 0,
-                CaptureTimesQueue = Mod.Setting.CaptureTimes ?? ""   
+                CaptureTimesQueue = Mod.Setting?.CaptureTimes ?? ""   
             };
 
             BackupPresetsToSessionFolder();
@@ -721,7 +731,7 @@ namespace CameraTimelapseMod.Systems
                     : (_saveQueue.Count + 1),
                 SuccessfulSaves = 0,
                 SessionStartDate = DateTime.Now.ToString("yyyyMMdd-HHmmss"),
-                CaptureTimesQueue = Mod.Setting.CaptureTimes ?? ""
+                CaptureTimesQueue = Mod.Setting?.CaptureTimes ?? ""
             };
             BackupPresetsToSessionFolder();
             _settleFrames = 30;
@@ -793,7 +803,11 @@ namespace CameraTimelapseMod.Systems
             _saveQueue = filterResult.Queue;
 
             _timeQueue = Tools.ParseTimes(_state.CaptureTimesQueue);
-            if (_timeQueue.Count == 0) _timeQueue.Add(12f);
+            if (_timeQueue.Count == 0)
+            {
+                LogsTools.Info("CaptureTimes empty on resume → using each preset's stored Time of Day");
+                _timeQueue.Add(float.NaN);
+            }
 
             if (!string.IsNullOrEmpty(_state.CurrentSaveName) && _state.CurrentSaveName != "current")
             {
@@ -836,6 +850,8 @@ namespace CameraTimelapseMod.Systems
 
         private void AbortSession()
         {
+            _resumeCancelled = true;
+            _pendingResume = false;
             Tools.StopCrashWatchdog();
 
             if (Systems.ObsClientSystem.IsConnected)
@@ -1084,7 +1100,7 @@ namespace CameraTimelapseMod.Systems
         }
 
         private float CurrentCaptureTime()
-            => _state.ModeIdx < _timeQueue.Count ? _timeQueue[_state.ModeIdx] : 12f;
+    => _state.ModeIdx < _timeQueue.Count ? _timeQueue[_state.ModeIdx] : float.NaN;
 
         private string CurrentTimeLabel() => Tools.FormatHourLabel(CurrentCaptureTime());
 

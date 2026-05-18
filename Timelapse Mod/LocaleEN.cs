@@ -187,7 +187,7 @@ namespace CameraTimelapseMod
                 { _setting.GetOptionDescLocaleID(nameof(Setting.RestartGameEveryNSaves)),
                     "Restart Cities Skylines II after every N processed saves to free memory and avoid leaks " +
                     "during very long sessions. The session automatically resumes after restart. " +
-                    "Set to 0 to disable. Usefull if you have a lot of mods or cannot load two saves without restarting inbetween." },
+                    "Set to 0 to disable. Usefull if you have a lot of mods or cannot load two saves without restarting inbetween. When I tried with almost no mods, after 60-100 loads it even crashed my full computer one time, thus I recommand setting this to restart the game every 40-60 saves but it's up to you." },
 
                 { _setting.GetOptionLabelLocaleID(nameof(Setting.AutoRestartOnCrash)),
                   "Auto-restart game on crash and auto continue" },
